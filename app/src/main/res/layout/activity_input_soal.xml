@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".InputSoal">
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/satu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <EditText
+            android:id="@+id/idSoal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="id Soal"/>
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/dua"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/satu">
+        <EditText
+            android:id="@+id/idKategori"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="kategori Soal" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/tiga"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/dua">
+        <EditText
+            android:id="@+id/soal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Soal" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/empat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/tiga">
+        <EditText
+            android:id="@+id/jawab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Jawab" />
+    </android.support.design.widget.TextInputLayout>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ok"
+        app:layout_constraintTop_toBottomOf="@+id/empat"/>
+
+</android.support.constraint.ConstraintLayout>
