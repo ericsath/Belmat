@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">Belmat</string>
     <string name="tentang"> Aplikasi pembelajaran matematika (Belmat) versi 0.8.12</string>
+    <string name="note">Jadi misal soal seperti di atas kan hasilnya 4 , nah 4 itu tadi ditulis dicanvas lalu dicocokan dengan gesture yang ada di database
+        jika benar lanjut ke soal selanjutnya jika salah suruh nulis lagi\n
+    sayangnya data gesture nya berbentuk txt, jika benar nanti ada info dan suara benar jika salah maka kebalikkannya\n
+        lalu per kategori soal ada 10 soal dan dikasih stopwatch , nanti untuk nilainya diambil dari stopwatch saja misal lebih cepat nilainya lebih bagus</string>
 </resources>
