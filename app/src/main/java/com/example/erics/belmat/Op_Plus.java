@@ -9,11 +9,16 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Path;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.os.Handler;
+import android.os.Message;
+import android.os.SystemClock;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,10 +30,13 @@ import java.util.List;
 
 public class Op_Plus extends Activity {
     private GestureOverlayView gestureOverlayView = null;
-
+    Button yha;
     private GestureLibrary gestureLibrary = null;
-    private TextView soal;
+    private TextView soal,timer;
     ArrayList<Soal> soalArray = new ArrayList<Soal>();
+    long MillisecondTime, StartTime, TimeBuff, UpdateTime = 0L ;
+    Handler handler;
+    int Seconds, Minutes, MilliSeconds ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +45,18 @@ public class Op_Plus extends Activity {
 
         Context context = getApplicationContext();
         init(context);
+        timer = (TextView) findViewById(R.id.time);
+        handler = new Handler() ;
+        StartTime = SystemClock.uptimeMillis();
+        handler.postDelayed(runnable, 0);
+
+        yha = (Button) findViewById(R.id.halo);
+        yha.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                doit();
+            }
+        });
 
         DatabaseHandler db = new DatabaseHandler(this);
         List<Soal> soals = db.getAllSoalPenjumlahan();
@@ -45,10 +65,26 @@ public class Op_Plus extends Activity {
             soalArray.add(cn);
         }
         soal = (TextView) findViewById(R.id.soal);
-        soal.setText(soalArray.indexOf(0));
+        soal.setText(db.getAllSoalPenjumlahan().get(2).getSoal());
 
         GesturePerformListener gesturePerformListener = new GesturePerformListener(gestureLibrary);
         gestureOverlayView.addOnGesturePerformedListener(gesturePerformListener);
+    }
+
+    private void doit() {
+        DatabaseHandler db = new DatabaseHandler(this);
+        List<Soal> soals = db.getAllSoalPenjumlahan();
+        for (Soal cn : soals) {
+            // add contacts data in arrayList
+            soalArray.add(cn);
+        }
+        soal = (TextView) findViewById(R.id.soal);
+        soal.setText(db.getAllSoalPenjumlahan().get(2).getSoal());
+
+        TimeBuff += MillisecondTime;
+
+        handler.removeCallbacks(runnable);
+
     }
 
     /* Initialise class or instance variables. */
@@ -74,4 +110,28 @@ public class Op_Plus extends Activity {
             gestureOverlayView = (GestureOverlayView)findViewById(R.id.gesture_overlay_view);
         }
     }
+    public Runnable runnable = new Runnable() {
+
+        public void run() {
+
+            MillisecondTime = SystemClock.uptimeMillis() - StartTime;
+
+            UpdateTime = TimeBuff + MillisecondTime;
+
+            Seconds = (int) (UpdateTime / 1000);
+
+            Minutes = Seconds / 60;
+
+            Seconds = Seconds % 60;
+
+            MilliSeconds = (int) (UpdateTime % 1000);
+
+            timer.setText("" + Minutes + ":"
+                    + String.format("%02d", Seconds) + ":"
+                    + String.format("%02d", MilliSeconds));
+
+            handler.postDelayed(this, 0);
+        }
+
+    };
 }

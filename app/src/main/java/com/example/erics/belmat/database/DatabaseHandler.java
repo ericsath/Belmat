@@ -134,5 +134,83 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return soalList;
     }
 
+    public List<Soal> getAllSoalPengurangan() {
+        List<Soal> soalList = new ArrayList<Soal>();
+        // Select All Query
+        String selectQuery = "SELECT * FROM soal WHERE kategori='pengurangan' ORDER BY RANDOM()";
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                Soal soal = new Soal();
+                soal.setIdSoal(cursor.getInt(0));
+                soal.setKategori(cursor.getString(1));
+                soal.setSoal(cursor.getString(2));
+                soal.setJawab(cursor.getString(3));
+                // Adding contact to list
+                soalList.add(soal);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        // close inserting data from database
+        db.close();
+        // return contact list
+        return soalList;
+    }
+
+    public List<Soal> getAllSoalPerkalian() {
+        List<Soal> soalList = new ArrayList<Soal>();
+        // Select All Query
+        String selectQuery = "SELECT * FROM soal WHERE kategori='perkalian' ORDER BY RANDOM()";
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                Soal soal = new Soal();
+                soal.setIdSoal(cursor.getInt(0));
+                soal.setKategori(cursor.getString(1));
+                soal.setSoal(cursor.getString(2));
+                soal.setJawab(cursor.getString(3));
+                // Adding contact to list
+                soalList.add(soal);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        // close inserting data from database
+        db.close();
+        // return contact list
+        return soalList;
+    }
+
+    public List<Soal> getAllSoalPembagian() {
+        List<Soal> soalList = new ArrayList<Soal>();
+        // Select All Query
+        String selectQuery = "SELECT * FROM soal WHERE kategori='pembagian' ORDER BY RANDOM()";
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                Soal soal = new Soal();
+                soal.setIdSoal(cursor.getInt(0));
+                soal.setKategori(cursor.getString(1));
+                soal.setSoal(cursor.getString(2));
+                soal.setJawab(cursor.getString(3));
+                // Adding contact to list
+                soalList.add(soal);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        // close inserting data from database
+        db.close();
+        // return contact list
+        return soalList;
+    }
+
 }
 

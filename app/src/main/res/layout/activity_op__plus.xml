@@ -13,9 +13,11 @@
     android:id="@+id/soal"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:text="2+2 = soal random ambil dari database sqlite "
-    android:textSize="20dp"
-    android:textColor="@color/black"/>
+    android:text="2+2"
+    android:textSize="50dp"
+    android:textColor="@color/black"
+    app:layout_constraintRight_toRightOf="parent"
+    app:layout_constraintLeft_toLeftOf="parent"/>
 
     <FrameLayout
         android:id="@+id/gesture"
@@ -36,11 +38,28 @@
             android:uncertainGestureColor="@color/black" />
     </FrameLayout>
 
+    <!--<TextView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/gesture"-->
+        <!--android:text="@string/note"-->
+        <!--android:textColor="@color/black"-->
+        <!--android:background="@color/white"/>-->
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/halo"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/gesture"
+        android:text="coba"/>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/gesture"
-        android:text="@string/note"
-        android:textColor="@color/black"
-        android:background="@color/white"/>
+        android:id="@+id/time"
+        app:layout_constraintTop_toBottomOf="@+id/halo"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:textColor="@color/black"/>
 </android.support.constraint.ConstraintLayout>
