@@ -7,22 +7,38 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.erics.belmat.database.DatabaseHandler;
 import com.example.erics.belmat.model.Soal;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class InputSoal extends AppCompatActivity {
     private final static String TAG ="logv"+InputSoal.class.getSimpleName();
     String id,kategori,soal,jwbn;
     private DatabaseHandler db = new DatabaseHandler(this);
     private Button ok;
+    ArrayList<Soal> soalArray = new ArrayList<Soal>();
+    SoalAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_input_soal);
 
+        List<Soal> soals = db.getAllSoal();
+        for (Soal cn : soals) {
+            // add contacts data in arrayList
+            soalArray.add(cn);
+
+        }
+        adapter = new SoalAdapter(this, R.layout.rv_soal,
+                soalArray);
+        final ListView dataList = (ListView) findViewById(R.id.recyc);
+        dataList.setAdapter(adapter);
 
         final EditText inputkat = (EditText) findViewById(R.id.idKategori);
         final EditText inputsoal = (EditText) findViewById(R.id.soal);

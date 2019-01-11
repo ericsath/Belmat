@@ -13,7 +13,9 @@ public class Soal {
         this.soal = soal;
         this.jawab = jwbn;
     }
+    public Soal(){
 
+    }
     public int getIdSoal() {
         return idSoal;
     }

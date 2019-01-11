@@ -14,12 +14,16 @@ import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.erics.belmat.database.DatabaseHandler;
 
 public class Op_Plus extends Activity {
     private GestureOverlayView gestureOverlayView = null;
 
     private GestureLibrary gestureLibrary = null;
+    private TextView soal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +32,11 @@ public class Op_Plus extends Activity {
 
         Context context = getApplicationContext();
         init(context);
+
+        DatabaseHandler db = new DatabaseHandler(this);
+
+        soal = (TextView) findViewById(R.id.soal);
+        soal.setText(db.soalRandomPenjumlahan());
 
         GesturePerformListener gesturePerformListener = new GesturePerformListener(gestureLibrary);
         gestureOverlayView.addOnGesturePerformedListener(gesturePerformListener);

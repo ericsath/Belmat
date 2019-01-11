@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 import com.example.erics.belmat.database.DatabaseHandler;
+import com.facebook.stetho.Stetho;
 
 public class MainActivity extends AppCompatActivity {
     ImageView btnA,btnB,btnC;
@@ -17,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Stetho.initializeWithDefaults(this);
 
 
         btnA = (ImageView) findViewById(R.id.pil);

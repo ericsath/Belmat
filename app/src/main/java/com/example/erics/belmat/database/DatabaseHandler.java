@@ -2,10 +2,14 @@ package com.example.erics.belmat.database;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.example.erics.belmat.model.Soal;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
 
@@ -30,8 +34,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + TABLE_SOAL + "("
                 + KEY_ID +" integer primary key autoincrement, "
                 + KEY_KATEGORI+ " varchar(50) not null, "
-                + KEY_JAWAB+ " varchar(50) not null, "
-                + KEY_SOAL+ " varchar(50) not null);";
+                + KEY_SOAL+ " varchar(50) not null, "
+                + KEY_JAWAB+ " varchar(50) not null);";
         db.execSQL(CREATE_SOAL);
     }
 
@@ -39,6 +43,19 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_SOAL);
         onCreate(db);
+    }
+
+    public String soalRandomPenjumlahan(){
+        String soalJumlah;
+        String selectQuery = "SELECT SOAL FROM SOAL WHERE kategori='penjumlahan' ORDER BY RANDOM() LIMIT 1";
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        soalJumlah = cursor.getString(0);
+        cursor.close();
+        db.close();
+        return soalJumlah;
     }
 
     public long insertData(Soal soal)
@@ -53,15 +70,41 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return id;
     }
 
-    public int updateDataSoal(Soal soal){
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(DatabaseHandler.KEY_KATEGORI, soal.getKategori());
-        contentValues.put(DatabaseHandler.KEY_SOAL, soal.getSoal());
-        contentValues.put(DatabaseHandler.KEY_JAWAB, soal.getJawab());
+//    public int updateDataSoal(Soal soal){
+//        SQLiteDatabase db = this.getWritableDatabase();
+//        ContentValues contentValues = new ContentValues();
+//        contentValues.put(DatabaseHandler.KEY_KATEGORI, soal.getKategori());
+//        contentValues.put(DatabaseHandler.KEY_SOAL, soal.getSoal());
+//        contentValues.put(DatabaseHandler.KEY_JAWAB, soal.getJawab());
+//
+//        return db.update(TABLE_SOAL,contentValues, KEY_ID + " = ?",
+//                new String[]{String.valueOf(soal.getIdSoal())});
+//    }
 
-        return db.update(TABLE_SOAL,contentValues, KEY_ID + " = ?",
-                new String[]{String.valueOf(soal.getIdSoal())});
+    public List<Soal> getAllSoal() {
+        List<Soal> soalList = new ArrayList<Soal>();
+        // Select All Query
+        String selectQuery = "SELECT * FROM soal";
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                Soal soal = new Soal();
+                soal.setIdSoal(cursor.getInt(0));
+                soal.setKategori(cursor.getString(1));
+                soal.setSoal(cursor.getString(2));
+                soal.setJawab(cursor.getString(3));
+                // Adding contact to list
+                soalList.add(soal);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        // close inserting data from database
+        db.close();
+        // return contact list
+        return soalList;
     }
 
 }
