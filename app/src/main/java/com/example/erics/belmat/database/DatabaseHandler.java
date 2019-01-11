@@ -21,6 +21,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String KEY_KATEGORI = "kategori";
     private static final String KEY_SOAL = "soal";
     private static final String KEY_JAWAB = "jawab";
+    private String soalJumlah;
 
 
     public DatabaseHandler(Context context) {
@@ -46,13 +47,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     public String soalRandomPenjumlahan(){
-        String soalJumlah;
         String selectQuery = "SELECT SOAL FROM SOAL WHERE kategori='penjumlahan' ORDER BY RANDOM() LIMIT 1";
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
-
-        soalJumlah = cursor.getString(0);
+        if (cursor.moveToFirst()) {
+            soalJumlah = cursor.getString(0);
+        }
         cursor.close();
         db.close();
         return soalJumlah;
@@ -85,6 +86,32 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         List<Soal> soalList = new ArrayList<Soal>();
         // Select All Query
         String selectQuery = "SELECT * FROM soal";
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                Soal soal = new Soal();
+                soal.setIdSoal(cursor.getInt(0));
+                soal.setKategori(cursor.getString(1));
+                soal.setSoal(cursor.getString(2));
+                soal.setJawab(cursor.getString(3));
+                // Adding contact to list
+                soalList.add(soal);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        // close inserting data from database
+        db.close();
+        // return contact list
+        return soalList;
+    }
+
+    public List<Soal> getAllSoalPenjumlahan() {
+        List<Soal> soalList = new ArrayList<Soal>();
+        // Select All Query
+        String selectQuery = "SELECT * FROM soal WHERE kategori='penjumlahan' ORDER BY RANDOM()";
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);

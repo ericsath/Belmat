@@ -18,12 +18,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.erics.belmat.database.DatabaseHandler;
+import com.example.erics.belmat.model.Soal;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Op_Plus extends Activity {
     private GestureOverlayView gestureOverlayView = null;
 
     private GestureLibrary gestureLibrary = null;
     private TextView soal;
+    ArrayList<Soal> soalArray = new ArrayList<Soal>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,9 +39,13 @@ public class Op_Plus extends Activity {
         init(context);
 
         DatabaseHandler db = new DatabaseHandler(this);
-
+        List<Soal> soals = db.getAllSoalPenjumlahan();
+        for (Soal cn : soals) {
+            // add contacts data in arrayList
+            soalArray.add(cn);
+        }
         soal = (TextView) findViewById(R.id.soal);
-        soal.setText(db.soalRandomPenjumlahan());
+        soal.setText(soalArray.indexOf(0));
 
         GesturePerformListener gesturePerformListener = new GesturePerformListener(gestureLibrary);
         gestureOverlayView.addOnGesturePerformedListener(gesturePerformListener);
