@@ -6,6 +6,14 @@ public class Soal {
     private String soal;
     private String jawab;
 
+    public Soal(String kategori, String soal, String jwbn){
+        super();
+        this.idSoal = idSoal;
+        this.kategori = kategori;
+        this.soal = soal;
+        this.jawab = jwbn;
+    }
+
     public int getIdSoal() {
         return idSoal;
     }

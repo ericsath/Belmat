@@ -11,7 +11,7 @@ import com.example.erics.belmat.database.DatabaseHandler;
 
 public class MainActivity extends AppCompatActivity {
     ImageView btnA,btnB,btnC;
-    Button tmbh;
+    private Button tmbh;
     @Override
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
         btnA = (ImageView) findViewById(R.id.pil);
         btnB = (ImageView) findViewById(R.id.tent);
         btnC = (ImageView) findViewById(R.id.kel);
-        tmbh = findViewById(R.id.tambah);
+        tmbh = (Button) findViewById(R.id.tambah);
 
         tmbh.setOnClickListener(new View.OnClickListener() {
             @Override

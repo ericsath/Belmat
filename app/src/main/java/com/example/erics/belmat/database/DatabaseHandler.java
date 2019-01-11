@@ -18,12 +18,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String KEY_SOAL = "soal";
     private static final String KEY_JAWAB = "jawab";
 
-    private static final String db_create = "create table "
-            + TABLE_SOAL + "("
-            + KEY_ID +" integer primary key autoincrement, "
-            + KEY_KATEGORI+ " varchar(50) not null, "
-            + KEY_JAWAB+ " varchar(50) not null, "
-            + KEY_SOAL+ " varchar(50) not null);";
 
     public DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -32,39 +26,43 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(db_create);
+        String CREATE_SOAL = "create table "
+                + TABLE_SOAL + "("
+                + KEY_ID +" integer primary key autoincrement, "
+                + KEY_KATEGORI+ " varchar(50) not null, "
+                + KEY_JAWAB+ " varchar(50) not null, "
+                + KEY_SOAL+ " varchar(50) not null);";
+        db.execSQL(CREATE_SOAL);
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_SOAL);
-        onCreate(sqLiteDatabase);
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_SOAL);
+        onCreate(db);
     }
 
-    public long insertData(int idnya, String kategori, String soal, String jawab)
+    public long insertData(Soal soal)
     {
-        SQLiteDatabase db = DatabaseHandler.getWritableDatabase();
+        SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(DatabaseHandler.KEY_ID, idnya);
-        contentValues.put(DatabaseHandler.KEY_KATEGORI, kategori);
-        contentValues.put(DatabaseHandler.KEY_SOAL, soal);
-        contentValues.put(DatabaseHandler.KEY_JAWAB, jawab);
+        contentValues.put(DatabaseHandler.KEY_KATEGORI, soal.getKategori());
+        contentValues.put(DatabaseHandler.KEY_SOAL, soal.getSoal());
+        contentValues.put(DatabaseHandler.KEY_JAWAB, soal.getJawab());
         long id = db.insert(DatabaseHandler.TABLE_SOAL, null , contentValues);
+        db.close();
         return id;
     }
 
+    public int updateDataSoal(Soal soal){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(DatabaseHandler.KEY_KATEGORI, soal.getKategori());
+        contentValues.put(DatabaseHandler.KEY_SOAL, soal.getSoal());
+        contentValues.put(DatabaseHandler.KEY_JAWAB, soal.getJawab());
 
-//    public void addRecord(Soal soal){
-//        SQLiteDatabase db  = getWritableDatabase();
-//
-//        ContentValues values = new ContentValues();
-//        values.put(KEY_ID, soal.getIdSoal());
-//        values.put(KEY_KATEGORI, soal.getKategori());
-//        values.put(KEY_SOAL, soal.getSoal());
-//        values.put(KEY_JAWAB, soal.getJawab());
-//
-//        db.insert(TABLE_SOAL, null, values);
-//        db.close();
-//    }
+        return db.update(TABLE_SOAL,contentValues, KEY_ID + " = ?",
+                new String[]{String.valueOf(soal.getIdSoal())});
+    }
+
 }
 
