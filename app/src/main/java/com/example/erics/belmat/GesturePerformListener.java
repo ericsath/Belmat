@@ -15,6 +15,7 @@ import java.util.ArrayList;
 public class GesturePerformListener implements GestureOverlayView.OnGesturePerformedListener {
 
     private GestureLibrary gestureLibrary = null;
+    String action;
 
     public GesturePerformListener(GestureLibrary gestureLibrary) {
         this.gestureLibrary = gestureLibrary;
@@ -40,7 +41,7 @@ public class GesturePerformListener implements GestureOverlayView.OnGesturePerfo
             /* Higher score higher gesture match. */
             if(firstPrediction.score > 1)
             {
-                String action = firstPrediction.name;
+                action = firstPrediction.name;
 
                 messageBuffer.append("Your gesture match " + action);
             }else
