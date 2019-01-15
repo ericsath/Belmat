@@ -2,9 +2,11 @@ package com.example.erics.belmat;
 
 import android.app.Activity;
 import android.content.Context;
+import android.gesture.Gesture;
 import android.gesture.GestureLibraries;
 import android.gesture.GestureLibrary;
 import android.gesture.GestureOverlayView;
+import android.gesture.Prediction;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Path;
@@ -13,6 +15,7 @@ import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -28,10 +31,9 @@ import com.example.erics.belmat.model.Soal;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Op_Plus extends Activity {
-    private GestureOverlayView gestureOverlayView = null;
+public class Op_Plus extends Activity implements GestureOverlayView.OnGesturePerformedListener {
     Button yha,jwb;
-    private GestureLibrary gestureLibrary = null;
+    GestureLibrary gestureLib;
     private TextView soal,timer;
     ArrayList<Soal> soalArray = new ArrayList<Soal>();
     long MillisecondTime, StartTime, TimeBuff, UpdateTime = 0L ;
@@ -40,14 +42,24 @@ public class Op_Plus extends Activity {
     public int kunci;
     List<Soal> soals;
     int urutansoal = 1;
+    String action;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_op__plus);
+        GestureOverlayView gestureOverlayView = new GestureOverlayView(this);
+        View inflate = getLayoutInflater().inflate(R.layout.activity_op__plus, null);
+        gestureOverlayView.addView(inflate);
+        gestureOverlayView.addOnGesturePerformedListener(this);
+        gestureLib = GestureLibraries.fromRawResource(this, R.raw.gesture);
+        if (!gestureLib.load()) {
+            finish();
+        }
+        setContentView(gestureOverlayView);
+//        setContentView(R.layout.activity_op__plus);
 
         Context context = getApplicationContext();
-        init(context);
+//        init(context);
         timer = (TextView) findViewById(R.id.time);
         handler = new Handler() ;
         StartTime = SystemClock.uptimeMillis();
@@ -79,10 +91,8 @@ public class Op_Plus extends Activity {
         soal.setText(soalArray.get(urutansoal).getSoal());
         kunci = Integer.parseInt(soalArray.get(urutansoal).getJawab());
 
-        Toast.makeText(Op_Plus.this,kunci+"",Toast.LENGTH_SHORT).show();
+//        Toast.makeText(Op_Plus.this,kunci+"",Toast.LENGTH_SHORT).show();
 
-        GesturePerformListener gesturePerformListener = new GesturePerformListener(gestureLibrary);
-        gestureOverlayView.addOnGesturePerformedListener(gesturePerformListener);
     }
 
     private void doit() {
@@ -108,7 +118,12 @@ public class Op_Plus extends Activity {
 
     }
     private void jwbit(){
-        Toast.makeText(Op_Plus.this,kunci+"",Toast.LENGTH_SHORT).show();
+        if (kunci != Integer.parseInt(action)){
+            Toast.makeText(Op_Plus.this,"SALAH",Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(Op_Plus.this,"BENAR",Toast.LENGTH_SHORT).show();
+        }
+//
 
         TimeBuff += MillisecondTime;
 
@@ -116,28 +131,28 @@ public class Op_Plus extends Activity {
     }
 
     /* Initialise class or instance variables. */
-    private void init(Context context)
-    {
-        if(gestureLibrary == null)
-        {
-            // Load custom gestures from gesture.txt file.
-            gestureLibrary = GestureLibraries.fromRawResource(context, R.raw.gesture);
-
-            if(!gestureLibrary.load())
-            {
-                AlertDialog alertDialog = new AlertDialog.Builder(context).create();
-                alertDialog.setMessage("Custom gesture file load failed.");
-                alertDialog.show();
-
-                finish();
-            }
-        }
-
-        if(gestureOverlayView == null)
-        {
-            gestureOverlayView = (GestureOverlayView)findViewById(R.id.gesture_overlay_view);
-        }
-    }
+//    private void init(Context context)
+//    {
+//        if(gestureLibrary == null)
+//        {
+//            // Load custom gestures from gesture.txt file.
+//            gestureLibrary = GestureLibraries.fromRawResource(context, R.raw.gesture);
+//
+//            if(!gestureLibrary.load())
+//            {
+//                AlertDialog alertDialog = new AlertDialog.Builder(context).create();
+//                alertDialog.setMessage("Custom gesture file load failed.");
+//                alertDialog.show();
+//
+//                finish();
+//            }
+//        }
+//
+//        if(gestureOverlayView == null)
+//        {
+//            gestureOverlayView = (GestureOverlayView)findViewById(R.id.gesture_overlay_view);
+//        }
+//    }
     public Runnable runnable = new Runnable() {
 
         public void run() {
@@ -162,4 +177,40 @@ public class Op_Plus extends Activity {
         }
 
     };
+
+//    public GesturePerformListener(GestureLibrary gestureLibrary) {
+//        this.gestureLib = gestureLibrary;
+//    }
+
+    @Override
+    public void onGesturePerformed(GestureOverlayView gestureOverlayView, Gesture gesture) {
+        // Recognize the gesture and return prediction list.
+        ArrayList<Prediction> predictionList = gestureLib.recognize(gesture);
+
+        int size = predictionList.size();
+
+        if(size > 0)
+        {
+            StringBuffer messageBuffer = new StringBuffer();
+
+            // Get the first prediction.
+            Prediction firstPrediction = predictionList.get(0);
+
+            /* Higher score higher gesture match. */
+            if(firstPrediction.score > 1)
+            {
+                action = firstPrediction.name;
+
+                messageBuffer.append("Anda menulis " + action);
+            }else
+            {
+                messageBuffer.append("Tulisan anda tidak terdeteksi.");
+            }
+
+            // Display a snackbar with related messages.
+            Snackbar snackbar = Snackbar.make(gestureOverlayView, messageBuffer.toString(), Snackbar.LENGTH_LONG);
+            snackbar.show();
+
+        }
+    }
 }
