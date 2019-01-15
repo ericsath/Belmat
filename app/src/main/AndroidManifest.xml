@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.erics.belmat">
 
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -33,7 +33,8 @@
         <activity android:name=".Op_Plus" />
         <activity android:name=".Op_Kali" />
         <activity android:name=".Op_Bagi" />
-        <activity android:name=".InputSoal"></activity>
+        <activity android:name=".InputSoal" />
+        <activity android:name=".Hasil"/>
     </application>
 
 </manifest>

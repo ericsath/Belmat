@@ -2,6 +2,8 @@ package com.example.erics.belmat;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.gesture.Gesture;
 import android.gesture.GestureLibraries;
 import android.gesture.GestureLibrary;
@@ -26,40 +28,37 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.erics.belmat.database.DatabaseHandler;
+import com.example.erics.belmat.helper.Utils;
 import com.example.erics.belmat.model.Soal;
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Op_Plus extends Activity implements GestureOverlayView.OnGesturePerformedListener {
+public class Op_Plus extends Activity {
     Button yha,jwb;
-    GestureLibrary gestureLib;
+    private GestureLibrary gestureLibrary = null;
+    private GestureOverlayView gestureOverlayView = null;
     private TextView soal,timer;
     ArrayList<Soal> soalArray = new ArrayList<Soal>();
     long MillisecondTime, StartTime, TimeBuff, UpdateTime = 0L ;
+    long waktunya;
     Handler handler;
     int Seconds, Minutes, MilliSeconds ;
     public int kunci;
     List<Soal> soals;
-    int urutansoal = 1;
-    String action;
+    int urutansoal = 0;
+    int action;
+    int score = 0;
+    public static Context contextOfApplication;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        GestureOverlayView gestureOverlayView = new GestureOverlayView(this);
-        View inflate = getLayoutInflater().inflate(R.layout.activity_op__plus, null);
-        gestureOverlayView.addView(inflate);
-        gestureOverlayView.addOnGesturePerformedListener(this);
-        gestureLib = GestureLibraries.fromRawResource(this, R.raw.gesture);
-        if (!gestureLib.load()) {
-            finish();
-        }
-        setContentView(gestureOverlayView);
-//        setContentView(R.layout.activity_op__plus);
+        setContentView(R.layout.activity_op__plus);
 
         Context context = getApplicationContext();
-//        init(context);
+        init(context);
         timer = (TextView) findViewById(R.id.time);
         handler = new Handler() ;
         StartTime = SystemClock.uptimeMillis();
@@ -73,13 +72,6 @@ public class Op_Plus extends Activity implements GestureOverlayView.OnGesturePer
             }
         });
 
-        jwb = (Button) findViewById(R.id.jwb);
-        jwb.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                jwbit();
-            }
-        });
 
         DatabaseHandler db = new DatabaseHandler(this);
         soals = db.getAllSoalPenjumlahan();
@@ -91,68 +83,90 @@ public class Op_Plus extends Activity implements GestureOverlayView.OnGesturePer
         soal.setText(soalArray.get(urutansoal).getSoal());
         kunci = Integer.parseInt(soalArray.get(urutansoal).getJawab());
 
-//        Toast.makeText(Op_Plus.this,kunci+"",Toast.LENGTH_SHORT).show();
 
+        Toast.makeText(Op_Plus.this,kunci+"",Toast.LENGTH_SHORT).show();
+
+        GesturePerformListener gesturePerformListener = new GesturePerformListener(gestureLibrary);
+        gestureOverlayView.addOnGesturePerformedListener(gesturePerformListener);
+        contextOfApplication = getApplicationContext();
     }
 
-    private void doit() {
-        /*DatabaseHandler db = new DatabaseHandler(this);
-        soals = db.getAllSoalPenjumlahan();
 
-        for (Soal cn : soals) {
-            // add contacts data in arrayList
-            soalArray.add(cn);
-        }*/
+    private void doit() {
         urutansoal++;
         soal = (TextView) findViewById(R.id.soal);
-//        soal.setText(db.getAllSoalPenjumlahan().get(urutansoal).getSoal());
-//        kunci = Integer.parseInt(db.getAllSoalPenjumlahan().get(urutansoal).getJawab());
-        soal.setText(soalArray.get(urutansoal).getSoal());
-        kunci = Integer.parseInt(soalArray.get(urutansoal).getJawab());
+
+        if (kunci != action){
+            Toast.makeText(Op_Plus.this,"SALAH",Toast.LENGTH_SHORT).show();
+            if (urutansoal >= 10){
+                Toast.makeText(Op_Plus.this,"SOAL SUDAH HABIS",Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(Op_Plus.this,Hasil.class);
+                intent.putExtra("skormu",score);
+                intent.putExtra("waktumu",waktunya);
+                startActivity(intent);
+
+                waktunya = TimeBuff += MillisecondTime;
+
+                handler.removeCallbacks(runnable);
+                if (urutansoal == 9){
+                    yha.setText("lihat hasilmu");
+                }
+            } else {
+                soal.setText(soalArray.get(urutansoal).getSoal());
+                kunci = Integer.parseInt(soalArray.get(urutansoal).getJawab());
+            }
+        } else if (kunci == action){
+            score = score+10;
+            Toast.makeText(Op_Plus.this,"BENAR dan skormu "+score,Toast.LENGTH_SHORT).show();
+            if (urutansoal >= 10){
+                TimeBuff += MillisecondTime;
+                handler.removeCallbacks(runnable);
+                String akhir = timer.getText().toString();
+
+                Toast.makeText(Op_Plus.this,"SOAL SUDAH HABIS",Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(Op_Plus.this,Hasil.class);
+                intent.putExtra("skormu",score);
+                intent.putExtra("waktumu",akhir);
+                startActivity(intent);
+
+
+                if (urutansoal == 9){
+                    yha.setText("lihat hasilmu");
+                }
+            } else {
+                soal.setText(soalArray.get(urutansoal).getSoal());
+                kunci = Integer.parseInt(soalArray.get(urutansoal).getJawab());
+            }
+        }
+
 
         Log.d("KUNCI", "doit: "+kunci);
 
-        TimeBuff += MillisecondTime;
-
-        handler.removeCallbacks(runnable);
-
-    }
-    private void jwbit(){
-        if (kunci != Integer.parseInt(action)){
-            Toast.makeText(Op_Plus.this,"SALAH",Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(Op_Plus.this,"BENAR",Toast.LENGTH_SHORT).show();
-        }
-//
-
-        TimeBuff += MillisecondTime;
-
-        handler.removeCallbacks(runnable);
     }
 
     /* Initialise class or instance variables. */
-//    private void init(Context context)
-//    {
-//        if(gestureLibrary == null)
-//        {
-//            // Load custom gestures from gesture.txt file.
-//            gestureLibrary = GestureLibraries.fromRawResource(context, R.raw.gesture);
-//
-//            if(!gestureLibrary.load())
-//            {
-//                AlertDialog alertDialog = new AlertDialog.Builder(context).create();
-//                alertDialog.setMessage("Custom gesture file load failed.");
-//                alertDialog.show();
-//
-//                finish();
-//            }
-//        }
-//
-//        if(gestureOverlayView == null)
-//        {
-//            gestureOverlayView = (GestureOverlayView)findViewById(R.id.gesture_overlay_view);
-//        }
-//    }
+    private void init(Context context)
+    {
+        if(gestureLibrary == null)
+        {
+            // Load custom gestures from gesture.txt file.
+            gestureLibrary = GestureLibraries.fromRawResource(context, R.raw.gesture);
+
+            if(!gestureLibrary.load())
+            {
+                AlertDialog alertDialog = new AlertDialog.Builder(context).create();
+                alertDialog.setMessage("Custom gesture file load failed.");
+                alertDialog.show();
+
+                finish();
+            }
+        }
+
+        if(gestureOverlayView == null)
+        {
+            gestureOverlayView = (GestureOverlayView)findViewById(R.id.gesture_overlay_view);
+        }
+    }
     public Runnable runnable = new Runnable() {
 
         public void run() {
@@ -178,39 +192,44 @@ public class Op_Plus extends Activity implements GestureOverlayView.OnGesturePer
 
     };
 
-//    public GesturePerformListener(GestureLibrary gestureLibrary) {
-//        this.gestureLib = gestureLibrary;
-//    }
+    public class GesturePerformListener implements GestureOverlayView.OnGesturePerformedListener {
 
-    @Override
-    public void onGesturePerformed(GestureOverlayView gestureOverlayView, Gesture gesture) {
-        // Recognize the gesture and return prediction list.
-        ArrayList<Prediction> predictionList = gestureLib.recognize(gesture);
+        private GestureLibrary gestureLibrary = null;
 
-        int size = predictionList.size();
+        public GesturePerformListener(GestureLibrary gestureLibrary) {
+            this.gestureLibrary = gestureLibrary;
+        }
 
-        if(size > 0)
-        {
-            StringBuffer messageBuffer = new StringBuffer();
+        @Override
+        public void onGesturePerformed(GestureOverlayView gestureOverlayView, Gesture gesture) {
 
-            // Get the first prediction.
-            Prediction firstPrediction = predictionList.get(0);
+            ArrayList<Prediction> predictionList = gestureLibrary.recognize(gesture);
 
-            /* Higher score higher gesture match. */
-            if(firstPrediction.score > 1)
+            int size = predictionList.size();
+
+            if(size > 0)
             {
-                action = firstPrediction.name;
+                StringBuffer messageBuffer = new StringBuffer();
 
-                messageBuffer.append("Anda menulis " + action);
-            }else
-            {
-                messageBuffer.append("Tulisan anda tidak terdeteksi.");
+                // Get the first prediction.
+                Prediction firstPrediction = predictionList.get(0);
+
+                /* Higher score higher gesture match. */
+                if(firstPrediction.score > 1)
+                {
+                    action = Integer.parseInt(firstPrediction.name);
+
+                    messageBuffer.append("Anda menulis " + action+" = "+kunci);
+                }else
+                {
+                    messageBuffer.append("Tulisan anda tidak terdeteksi.");
+                }
+
+                // Display a snackbar with related messages.
+                Snackbar snackbar = Snackbar.make(gestureOverlayView, messageBuffer.toString(), Snackbar.LENGTH_LONG);
+                snackbar.show();
+
             }
-
-            // Display a snackbar with related messages.
-            Snackbar snackbar = Snackbar.make(gestureOverlayView, messageBuffer.toString(), Snackbar.LENGTH_LONG);
-            snackbar.show();
-
         }
     }
 }
