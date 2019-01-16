@@ -8,6 +8,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 
 public class PilBil extends Activity {
@@ -27,28 +28,36 @@ public class PilBil extends Activity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(PilBil.this, Op_Plus.class);
+                intent.putExtra("operasi","tambah");
                 startActivity(intent);
+                finish();
             }
         });
         btnB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(PilBil.this, Op_Min.class);
+                Intent intent = new Intent(PilBil.this, Op_Plus.class);
+                intent.putExtra("operasi","kurang");
                 startActivity(intent);
+                finish();
             }
         });
         btnC.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(PilBil.this, Op_Kali.class);
+                Intent intent = new Intent(PilBil.this, Op_Plus.class);
+                intent.putExtra("operasi","kali");
                 startActivity(intent);
+                finish();
             }
         });
         btnD.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(PilBil.this, Op_Bagi.class);
+                Intent intent = new Intent(PilBil.this, Op_Plus.class);
+                intent.putExtra("operasi","bagi");
                 startActivity(intent);
+                finish();
             }
         });
     }

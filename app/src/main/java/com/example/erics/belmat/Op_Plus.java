@@ -12,6 +12,7 @@ import android.gesture.Prediction;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Path;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -51,6 +52,7 @@ public class Op_Plus extends Activity {
     int action;
     int score = 0;
     public static Context contextOfApplication;
+    MediaPlayer mp1,mp2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,18 +75,30 @@ public class Op_Plus extends Activity {
         });
 
 
+
         DatabaseHandler db = new DatabaseHandler(this);
-        soals = db.getAllSoalPenjumlahan();
+
+        Bundle bundle = getIntent().getExtras();
+        String operasi = bundle.getString("operasi","");
+        if (operasi.equalsIgnoreCase("tambah")){
+            soals = db.getAllSoalPenjumlahan();
+        } else if (operasi.equalsIgnoreCase("kurang")){
+            soals = db.getAllSoalPengurangan();
+        } else if (operasi.equalsIgnoreCase("bagi")){
+            soals = db.getAllSoalPembagian();
+        } else if (operasi.equalsIgnoreCase("kali")){
+            soals = db.getAllSoalPerkalian();
+        }
+
         for (Soal cn : soals) {
             // add contacts data in arrayList
             soalArray.add(cn);
         }
+
         soal = (TextView) findViewById(R.id.soal);
         soal.setText(soalArray.get(urutansoal).getSoal());
         kunci = Integer.parseInt(soalArray.get(urutansoal).getJawab());
 
-
-        Toast.makeText(Op_Plus.this,kunci+"",Toast.LENGTH_SHORT).show();
 
         GesturePerformListener gesturePerformListener = new GesturePerformListener(gestureLibrary);
         gestureOverlayView.addOnGesturePerformedListener(gesturePerformListener);
@@ -97,8 +111,11 @@ public class Op_Plus extends Activity {
         soal = (TextView) findViewById(R.id.soal);
 
         if (kunci != action){
+            mp2 = MediaPlayer.create(this,R.raw.salah);
+            mp2.start();
             Toast.makeText(Op_Plus.this,"SALAH",Toast.LENGTH_SHORT).show();
             if (urutansoal >= 10){
+
                 Toast.makeText(Op_Plus.this,"SOAL SUDAH HABIS",Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(Op_Plus.this,Hasil.class);
                 intent.putExtra("skormu",score);
@@ -117,7 +134,9 @@ public class Op_Plus extends Activity {
             }
         } else if (kunci == action){
             score = score+10;
-            Toast.makeText(Op_Plus.this,"BENAR dan skormu "+score,Toast.LENGTH_SHORT).show();
+            mp1 = MediaPlayer.create(this,R.raw.benar);
+            mp1.start();
+            Toast.makeText(Op_Plus.this,"BENAR",Toast.LENGTH_SHORT).show();
             if (urutansoal >= 10){
                 TimeBuff += MillisecondTime;
                 handler.removeCallbacks(runnable);
@@ -219,7 +238,7 @@ public class Op_Plus extends Activity {
                 {
                     action = Integer.parseInt(firstPrediction.name);
 
-                    messageBuffer.append("Anda menulis " + action+" = "+kunci);
+                    messageBuffer.append("Anda menulis " + action);
                 }else
                 {
                     messageBuffer.append("Tulisan anda tidak terdeteksi.");
@@ -231,5 +250,12 @@ public class Op_Plus extends Activity {
 
             }
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(Op_Plus.this,PilBil.class);
+        startActivity(intent);
+        finish();
     }
 }

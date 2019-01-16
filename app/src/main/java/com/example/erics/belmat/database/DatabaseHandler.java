@@ -71,17 +71,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return id;
     }
 
-//    public int updateDataSoal(Soal soal){
-//        SQLiteDatabase db = this.getWritableDatabase();
-//        ContentValues contentValues = new ContentValues();
-//        contentValues.put(DatabaseHandler.KEY_KATEGORI, soal.getKategori());
-//        contentValues.put(DatabaseHandler.KEY_SOAL, soal.getSoal());
-//        contentValues.put(DatabaseHandler.KEY_JAWAB, soal.getJawab());
-//
-//        return db.update(TABLE_SOAL,contentValues, KEY_ID + " = ?",
-//                new String[]{String.valueOf(soal.getIdSoal())});
-//    }
-
     public List<Soal> getAllSoal() {
         List<Soal> soalList = new ArrayList<Soal>();
         // Select All Query
