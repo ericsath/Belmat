@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this,InputSoal.class);
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -49,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, PilBil.class);
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -57,13 +59,14 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, Tent.class);
                 startActivity(intent);
+                finish();
             }
         });
 
         btnC.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                moveTaskToBack(true);
+                finish();
             }
         });
     }

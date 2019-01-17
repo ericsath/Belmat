@@ -115,16 +115,18 @@ public class Op_Plus extends Activity {
             mp2.start();
             Toast.makeText(Op_Plus.this,"SALAH",Toast.LENGTH_SHORT).show();
             if (urutansoal >= 10){
+                TimeBuff += MillisecondTime;
 
+                handler.removeCallbacks(runnable);
+
+                String akhir1 = timer.getText().toString();
                 Toast.makeText(Op_Plus.this,"SOAL SUDAH HABIS",Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(Op_Plus.this,Hasil.class);
                 intent.putExtra("skormu",score);
-                intent.putExtra("waktumu",waktunya);
+                intent.putExtra("waktumu",akhir1);
                 startActivity(intent);
+                finish();
 
-                waktunya = TimeBuff += MillisecondTime;
-
-                handler.removeCallbacks(runnable);
                 if (urutansoal == 9){
                     yha.setText("lihat hasilmu");
                 }
@@ -147,6 +149,7 @@ public class Op_Plus extends Activity {
                 intent.putExtra("skormu",score);
                 intent.putExtra("waktumu",akhir);
                 startActivity(intent);
+                finish();
 
 
                 if (urutansoal == 9){
@@ -157,9 +160,6 @@ public class Op_Plus extends Activity {
                 kunci = Integer.parseInt(soalArray.get(urutansoal).getJawab());
             }
         }
-
-
-        Log.d("KUNCI", "doit: "+kunci);
 
     }
 
@@ -254,8 +254,6 @@ public class Op_Plus extends Activity {
 
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(Op_Plus.this,PilBil.class);
-        startActivity(intent);
-        finish();
+        Toast.makeText(contextOfApplication, "Selesaikan dulu soalnya", Toast.LENGTH_SHORT).show();
     }
 }

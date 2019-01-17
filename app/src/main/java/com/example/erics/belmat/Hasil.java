@@ -34,7 +34,7 @@ public class Hasil extends AppCompatActivity {
         builder.setMessage("Mau belajar lagi ? ");
         builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                Intent intent = new Intent(Hasil.this,MainActivity.class);
+                Intent intent = new Intent(Hasil.this,PilBil.class);
                 startActivity(intent);
                 finish();
 
@@ -42,7 +42,7 @@ public class Hasil extends AppCompatActivity {
         });
         builder.setNegativeButton("Keluar", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                moveTaskToBack(true);
+                finish();
             }
         });
         builder.show();
