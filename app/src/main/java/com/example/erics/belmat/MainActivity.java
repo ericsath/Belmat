@@ -19,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
     boolean doubleBackToExitPressedOnce = false;
     ConstraintLayout mLayout;
     Snackbar mSnackbar;
+    private DatabaseHandler db;
 
     @Override
 
@@ -26,7 +27,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Stetho.initializeWithDefaults(this);
-
 
         btnA = (ImageView) findViewById(R.id.pil);
         btnB = (ImageView) findViewById(R.id.tent);

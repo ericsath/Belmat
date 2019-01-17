@@ -38,6 +38,48 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + KEY_SOAL+ " varchar(50) not null, "
                 + KEY_JAWAB+ " varchar(50) not null);";
         db.execSQL(CREATE_SOAL);
+
+        String sql = "INSERT INTO soal (kategori, soal, jawab) VALUES ('penjumlahan','4+5','9'),\n" +
+                "\t\t('penjumlahan','3+2','5'),\n" +
+                "\t\t('penjumlahan','6+2','8'),\n" +
+                "\t\t('penjumlahan','5+2','7'),\n" +
+                "\t\t('penjumlahan','1+2','3'),\n" +
+                "\t\t('penjumlahan','2+4','6'),\n" +
+                "\t\t('penjumlahan','1+3','4'),\n" +
+                "\t\t('penjumlahan','7+2','9'),\n" +
+                "\t\t('penjumlahan','5+2','7'),\n" +
+                "\t\t('penjumlahan','2+4','6'),\n" +
+                "\t\t\t('pengurangan','9-2','7'),\n" +
+                "\t\t\t('pengurangan','8-6','2'),\n" +
+                "\t\t\t('pengurangan','7-1','6'),\n" +
+                "\t\t\t('pengurangan','3-2','1'),\n" +
+                "\t\t\t('pengurangan','9-8','1'),\n" +
+                "\t\t\t('pengurangan','10-4','6'),\n" +
+                "\t\t\t('pengurangan','7-5','2'),\n" +
+                "\t\t\t('pengurangan','10-5','5'),\n" +
+                "\t\t\t('pengurangan','9-1','8'),\n" +
+                "\t\t\t('pengurangan','10-8','4'),\n" +
+                "\t\t\t\t('perkalian','2x4','8'),\n" +
+                "\t\t\t\t('perkalian','3x3','9'),\n" +
+                "\t\t\t\t('perkalian','6x2','12'),\n" +
+                "\t\t\t\t('perkalian','5x2','10'),\n" +
+                "\t\t\t\t('perkalian','1x3','3'),\n" +
+                "\t\t\t\t('perkalian','3x3','9'),\n" +
+                "\t\t\t\t('perkalian','4x2','8'),\n" +
+                "\t\t\t\t('perkalian','3x4','12'),\n" +
+                "\t\t\t\t('perkalian','5x2','10'),\n" +
+                "\t\t\t\t('perkalian','3x2','6'),\n" +
+                "\t\t\t\t\t('pembagian','10:2','5'),\n" +
+                "\t\t\t\t\t('pembagian','16:2','8'),\n" +
+                "\t\t\t\t\t('pembagian','8:4','2'),\n" +
+                "\t\t\t\t\t('pembagian','10:5','2'),\n" +
+                "\t\t\t\t\t('pembagian','9:3','3'),\n" +
+                "\t\t\t\t\t('pembagian','12:2','6'),\n" +
+                "\t\t\t\t\t('pembagian','14:2','7'),\n" +
+                "\t\t\t\t\t('pembagian','6:3','2'),\n" +
+                "\t\t\t\t\t('pembagian','12:6','2'),\n" +
+                "\t\t\t\t\t('pembagian','16:2','8'); ";
+        db.execSQL(sql);
     }
 
     @Override
@@ -45,7 +87,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_SOAL);
         onCreate(db);
     }
-
     public String soalRandomPenjumlahan(){
         String selectQuery = "SELECT SOAL FROM SOAL WHERE kategori='penjumlahan' ORDER BY RANDOM() LIMIT 1";
 

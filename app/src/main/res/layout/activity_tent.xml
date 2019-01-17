@@ -8,14 +8,13 @@
     android:background="@drawable/background"
     tools:context="com.example.erics.belmat.Tent">
 
-    <EditText
+    <TextView
         android:id="@+id/editText"
         android:layout_centerInParent="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
         android:text="@string/tentang"
-        tools:layout_editor_absoluteX="99dp"
-        tools:layout_editor_absoluteY="135dp" />
+        android:textColor="@color/black"
+        android:background="@color/colorPrimary"/>
 
 </RelativeLayout>
