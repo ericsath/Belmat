@@ -33,7 +33,6 @@
         <activity android:name=".Op_Plus" />
         <activity android:name=".Op_Kali" />
         <activity android:name=".Op_Bagi" />
-        <activity android:name=".InputSoal" />
         <activity android:name=".Hasil"/>
     </application>
 

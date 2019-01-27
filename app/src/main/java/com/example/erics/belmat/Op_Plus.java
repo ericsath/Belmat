@@ -29,7 +29,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.erics.belmat.database.DatabaseHandler;
-import com.example.erics.belmat.helper.Utils;
 import com.example.erics.belmat.model.Soal;
 
 import java.sql.Time;

@@ -31,19 +31,9 @@ public class MainActivity extends AppCompatActivity {
         btnA = (ImageView) findViewById(R.id.pil);
         btnB = (ImageView) findViewById(R.id.tent);
         btnC = (ImageView) findViewById(R.id.kel);
-        tmbh = (Button) findViewById(R.id.tambah);
 
         mLayout = findViewById(R.id.layout_main);
         mSnackbar = Snackbar.make(mLayout,"Klik sekali lagi untuk keluar aplikasi", Snackbar.LENGTH_SHORT);
-
-        tmbh.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this,InputSoal.class);
-                startActivity(intent);
-                finish();
-            }
-        });
 
         btnA.setOnClickListener(new View.OnClickListener() {
             @Override
