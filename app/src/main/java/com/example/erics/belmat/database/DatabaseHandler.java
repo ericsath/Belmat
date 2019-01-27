@@ -41,7 +41,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         String sql = "INSERT INTO soal (kategori, soal, jawab) VALUES ('penjumlahan','4+5','9'),\n" +
                 "\t\t('penjumlahan','3+2','5'),\n" +
-                "\t\t('penjumlahan','6+2','8'),\n" +
+                "\t\t('penjumlahan','4+4','8'),\n" +
                 "\t\t('penjumlahan','5+2','7'),\n" +
                 "\t\t('penjumlahan','1+2','3'),\n" +
                 "\t\t('penjumlahan','2+4','6'),\n" +
